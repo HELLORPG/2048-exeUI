@@ -17,5 +17,6 @@ public:
 	void InitGameBoard();//初始化随机数以及游戏盘
 	bool RandPlace(int &row, int &col) const;//用于随机2048游戏盘上的某一个有效位置
 	int GetOperate() const;
-	int DoOperate(int &method);//返回值用于告诉UI下一步的动作
+	int DoOperate(int method);//返回值用于告诉UI下一步的动作
+	bool MoveNum(int direction);//用于返回这次移动是否是合法的
 };

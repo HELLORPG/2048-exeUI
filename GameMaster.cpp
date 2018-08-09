@@ -80,7 +80,41 @@ int GameMaster::GetOperate() const
 	return ret;
 }
 
-int GameMaster::DoOperate(int &method)
+bool GameMaster::MoveNum(int direction)
+{
+	int add_score = 0;//本次移动之后增加的分数
+	int game_board_copy[4][4];//通过不同的copy方式达到不同的移动方向
+
+	switch (direction)
+	{
+	case UP:
+	{
+		for (int i = 0; i < FOUR; ++i)
+			for (int j = 0; j < FOUR; ++j)
+				game_board_copy[i][j] = game_board[i][j];
+	}break;
+	case DOWN:
+	{
+		for (int i = 0; i < FOUR; ++i)
+			for (int j = 0; j < FOUR; ++j)
+				game_board_copy[i][j] = game_board[FOUR - 1 - i][FOUR - 1 - j];
+	}break;
+	case LEFT:
+	{
+		for (int i = 0; i < FOUR; ++i)
+			for (int j = 0; j < FOUR; ++j)
+				game_board_copy[i][j] = game_board[FOUR - 1 - j][i];
+	}break;
+	case RIGHT:
+	{
+		for (int i = 0; i < FOUR; ++i)
+			for (int j = 0; j < FOUR; ++j)
+				game_board_copy[i][j] = game_board[j][FOUR - 1 - i];
+	}break;
+	}
+}
+
+int GameMaster::DoOperate(int method)
 {
 	int ret = FALSEOPERATE;
 	switch (method)
