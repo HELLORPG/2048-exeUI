@@ -82,8 +82,13 @@ int GameMaster::GetOperate() const
 
 int GameMaster::DoOperate(int &method)
 {
+	int ret = FALSEOPERATE;
 	switch (method)
 	{
-
+	case FALSEOPERATE:ret = FALSEOPERATE; break;
+	case INPUT:ret = INPUT; break;
+	case VERSION:ret = VERSION; break;
+	case QUIT:ret = QUIT; break;
 	}
+	return ret;
 }
