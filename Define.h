@@ -6,6 +6,8 @@
 #include <ctime>
 #include <cstdlib>
 #include <conio.h>
+#include <Windows.h>
+#include <cmath>
 //将所有需要的头文件尽可能的写在了Define.h中
 
 using std::string;
@@ -32,3 +34,5 @@ using std::endl;
 #define FALSEOPERATE 0//作为错误的操作提示
 
 #define RANDTEST 0//为1的时候作为随机数的开发者监视模式
+
+#define MAXNUM 12//作为一共有多少个数字可能性的表示

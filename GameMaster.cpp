@@ -80,8 +80,9 @@ int GameMaster::GetOperate() const
 	return ret;
 }
 
-bool GameMaster::MoveNum(int direction)
+bool GameMaster::MoveNum(int direction, int mode)
 {
+	bool flag = false;//作为是否有成功移动的标志
 	int add_score = 0;//本次移动之后增加的分数
 	int game_board_copy[4][4];//通过不同的copy方式达到不同的移动方向
 
@@ -111,7 +112,83 @@ bool GameMaster::MoveNum(int direction)
 			for (int j = 0; j < FOUR; ++j)
 				game_board_copy[i][j] = game_board[j][FOUR - 1 - i];
 	}break;
+	default:cout << "---------->中途出现了数据传输的错误或者数据遭到了污染，请联系程序开发者进行分析和解决" << endl; exit(-1); break;
 	}
+
+	//这是2048移动的关键代码
+	for (int i = 0; i < FOUR; ++i)
+	{
+		for (int j = 0; j < FOUR; ++j)
+		{
+			//需要分成两种情况进行讨论，一种是该位置是空白的，一种是该位置有数据
+			if (game_board_copy[i][j] == 0)
+			{
+				for (int find = i + 1; find < FOUR; ++find)
+				{
+					if (game_board_copy[find][j] != 0)//遇到不是0的数据就平移到当前的位置
+					{
+						game_board_copy[i][j] = game_board_copy[find][j];
+						flag = true;
+						break;
+					}
+				}
+			}
+			else
+			{
+				for (int find = i + 1; find < FOUR; ++find)
+				{
+					if (game_board_copy[find][j] != 0 && game_board_copy[find][j] != game_board_copy[i][j])
+						break;
+					if (game_board_copy[find][j] == game_board_copy[i][j])
+					{
+						game_board_copy[i][j] += game_board_copy[i][j];
+						game_board_copy[find][j] = 0;
+						flag = true;
+						++add_score;
+						break;
+					}
+				}
+			}
+		}
+	}
+	//以上是2048移动的关键代码
+
+	//需要将原来所有的数据还回原来的游戏盘
+	if (mode == 1)
+	{
+		switch (direction)
+		{
+		case UP:
+		{
+			for (int i = 0; i < FOUR; ++i)
+				for (int j = 0; j < FOUR; ++j)
+					game_board[i][j] = game_board_copy[i][j];
+		}break;
+		case DOWN:
+		{
+			for (int i = 0; i < FOUR; ++i)
+				for (int j = 0; j < FOUR; ++j)
+					game_board[FOUR - 1 - i][FOUR - 1 - j] = game_board_copy[i][j];
+		}break;
+		case LEFT:
+		{
+			for (int i = 0; i < FOUR; ++i)
+				for (int j = 0; j < FOUR; ++j)
+					game_board[FOUR - 1 - j][i] = game_board_copy[i][j];
+		}break;
+		case RIGHT:
+		{
+			for (int i = 0; i < FOUR; ++i)
+				for (int j = 0; j < FOUR; ++j)
+					game_board[j][FOUR - 1 - i] = game_board_copy[i][j];
+		}break;
+		default:cout << "---------->中途出现了数据传输的错误或者数据遭到了污染，请联系程序开发者进行分析和解决" << endl; exit(-1); break;
+		}
+	}
+
+	score += add_score;//将分数上载
+
+	return flag;
 }
 
 int GameMaster::DoOperate(int method)
@@ -125,4 +202,20 @@ int GameMaster::DoOperate(int method)
 	case QUIT:ret = QUIT; break;
 	}
 	return ret;
+}
+
+bool GameMaster::AddNum()
+{
+	int i = 0, j = 0;
+	bool result = this->RandPlace(i, j);
+	if (!result)
+		return false;//此时无法添加数据
+	else
+	{
+		if (rand() % 2 == 0)
+			game_board[i][j] = 2;
+		else
+			game_board[i][j] = 4;
+		return true;
+	}
 }

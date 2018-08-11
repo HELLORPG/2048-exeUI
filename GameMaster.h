@@ -18,5 +18,6 @@ public:
 	bool RandPlace(int &row, int &col) const;//用于随机2048游戏盘上的某一个有效位置
 	int GetOperate() const;
 	int DoOperate(int method);//返回值用于告诉UI下一步的动作
-	bool MoveNum(int direction);//用于返回这次移动是否是合法的
+	bool MoveNum(int direction, int mode);//用于返回这次移动是否是合法的
+	bool AddNum();//在游戏盘上添加一个数字
 };
