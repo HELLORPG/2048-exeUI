@@ -44,7 +44,7 @@ void GameMaster::InitGameBoard()
 #else
 	srand(time(0));
 #endif
-	game_board[rand()][rand()] = TWO;
+	game_board[rand() % 4][rand() % 4] = TWO;
 	int i = 0, j = 0;
 	this->RandPlace(i, j);
 	game_board[i][j] = TWO;

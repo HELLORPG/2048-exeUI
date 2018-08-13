@@ -2,18 +2,83 @@
 
 GameUI::GameUI()
 {
-	for (int i = 0; i < MAXNUM; ++i)
+	for (int i = 0; i < MAXNUM + 1; ++i)
 	{
-		number[i].color = (NumColor)(int)pow(2, i + 1);
+		number[i].color = (NumColor)(int)pow(2, i);
+		number[i].num_UI[0] = (30, ' ');
+		number[i].num_UI[1] = (30, ' ');
+		number[i].num_UI[7] = (30, ' ');
+		number[i].num_UI[8] = (30, ' ');
 	}
-	number[0].num_UI[0] = (20, ' ');
+
+	//0
+	{
+		for (int i = 2; i < 7; ++i)
+			number[0].num_UI[i] = (30, ' ');
+	}
+
+	//2
+	{
+		number[1].num_UI[2] = "            ███            ";
+		number[1].num_UI[3] = "                █            ";
+		number[1].num_UI[4] = "            ███            ";
+		number[1].num_UI[5] = "            █                ";
+		number[1].num_UI[6] = "            ███            ";
+	}
+
+	//4
+	{
+		number[2].num_UI[2] = "            █  █            ";
+		number[2].num_UI[3] = "            █  █            ";
+		number[2].num_UI[4] = "            ███            ";
+		number[2].num_UI[5] = "                █            ";
+		number[2].num_UI[6] = "                █            ";
+	}
+
+	//8
+	{
+		number[3].num_UI[2] = "            ███            ";
+		number[3].num_UI[3] = "            █  █            ";
+		number[3].num_UI[4] = "            ███            ";
+		number[3].num_UI[5] = "            █  █            ";
+		number[3].num_UI[6] = "            ███            ";
+	}
+
+	//16
+	{
+		number[4].num_UI[2] = "          █ ███           ";
+		number[4].num_UI[3] = "          █ █               ";
+		number[4].num_UI[4] = "          █ ███           ";
+		number[4].num_UI[5] = "          █ █  █           ";
+		number[4].num_UI[6] = "          █ ███           ";
+	}
+
 }
+
+void GameUI::VersionUI() const
+{
+	string blank(50, ' ');
+	string short_blank(25, ' ');
+	cout << "\n\n\n\n";
+	cout << blank << "VERSION 版本信息" << endl << endl << endl << endl;
+	cout << short_blank << "●2048小游戏 exeUI版" << endl << endl;
+	cout << short_blank << "●version 2.0" << endl << endl;
+	cout << short_blank << "●开发时间：2018.8.9 - 2018.8.12" << endl << endl;
+	cout << short_blank << "●开发者/Programmer：GaoRP" << endl << endl;
+	cout << short_blank << "●联系方式/E-mail：HELLORPG2017@gmail.com" << endl << endl;
+	return;
+}
+
 void GameUI::BeginUI()
 {
-	string blank(35, ' ');
-	string short_blank(25, ' ');
-	cout << "\n\n\n\n\n\n\n\n\n";
-	if (time(0) % 3 == 0)
+	system("color 3F");
+
+	string blank(50, ' ');
+	string short_blank(40, ' ');
+	cout << "\n\n\n\n\n\n\n";
+
+	int time_get = time(0);
+	if (time_get % 3 == 0)
 	{
 		cout << blank << "   ╔══════════════════════════════════════╗   " << endl;
 		cout << blank << "   ║   .d888b.  .d88b.    j88D  .d888b.   ║   " << endl;
@@ -24,7 +89,7 @@ void GameUI::BeginUI()
 		cout << blank << "   ║   888888D  `Y88P'      VP  `Y888P'   ║   " << endl;
 		cout << blank << "   ╚══════════════════════════════════════╝   " << endl;
 	}
-	else if (time(0) % 3 == 1)
+	else if (time_get % 3 == 1)
 	{
 		cout << blank << "╔════════════════════════════════════════════╗" << endl;
 		cout << blank << "║  ..#######....#####...##.........#######.  ║" << endl;
@@ -56,8 +121,62 @@ void GameUI::BeginUI()
 	cout << blank << blank << "          version 2.0" << endl;
 	cout << blank << blank << "          By RP·G 2018.8.11" << endl;
 	cout << blank << blank << "      ╘═════════════════════════" << endl;
-	cout << "\n\n\n\n\n\n\n";
+
+	//cout << "\n\n\n\n\n\n\n";
+	cout << endl << endl;
+	cout << blank << "   ╔══════════════════════════════════════╗   " << endl;
+	cout << blank << "   ║           按回车键开始游戏           ║   " << endl;
+	cout << blank << "   ║    Press ENTER to enter the game!    ║   " << endl;
+	cout << blank << "   ╚══════════════════════════════════════╝   " << endl;
+	cout << endl << endl << endl << endl;
+
 	cout << "->如果您发现任何BUG请与开发者联系 |" << endl;
 	cout << "->If you find any BUG, please connect with the programmer |" << endl;
+
+	do
+	{
+		int get = (_getch());
+		if (get == 13)
+			break;
+		else if (get == 'v')
+		{
+			system("CLS");
+			this->VersionUI();
+		}
+	} while (1);
+
+	system("CLS");
+
 	return;
 }
+
+void GameUI::PrintGameBoard(class GameMaster game) const
+{
+	//游戏盘的大小应该是94的长度，高度是34行
+	int print_board[4][4];//这是打印的依据，可以方便寻找到需要的numUI
+	for (int i = 0; i < FOUR; ++i)
+	{
+		for (int j = 0; j < FOUR; ++j)
+		{
+			if (game.game_board[i][j] == 0)
+				print_board[i][j] = 0;
+			else
+				print_board[i][j] = log(game.game_board[i][j]) / log(2);
+		}
+	}
+
+	cout << endl;
+	cout << "╔";
+	for (int i = 1; i < 4 * NUMWIDTH + 4; ++i)
+		cout << "═";
+	cout << "╗" << endl;
+	//前述是输出了游戏盘的头
+
+	for (int i = 1; i < 4 * NUMHEIGHT + 4; ++i)
+	{
+		cout << "->" << endl;
+	}
+
+	return;
+}
+

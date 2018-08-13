@@ -36,3 +36,6 @@ using std::endl;
 #define RANDTEST 0//为1的时候作为随机数的开发者监视模式
 
 #define MAXNUM 12//作为一共有多少个数字可能性的表示
+
+#define NUMWIDTH 30//每一个数字UI的宽度
+#define NUMHEIGHT 9//每一个数字UI的高度
